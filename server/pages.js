@@ -86,7 +86,6 @@ pages.add('new-collective-onboarding-modal', '/:slug/onboarding/:step(administra
 
 // Events using new collective page
 pages.add('event', '/:parentCollectiveSlug/events/:eventSlug', 'new-collective-page');
-pages.add('legacy-event', '/:parentCollectiveSlug/events/:eventSlug/legacy', 'event');
 
 // Tier page
 // ---------------
@@ -193,6 +192,5 @@ pages.add('new-collective-page', '/:slug/v2');
 
 // Collective page
 pages.add('collective', '/:slug', 'new-collective-page');
-pages.add('legacy-collective-page', '/:slug/legacy', 'collective');
 
 module.exports = pages;
