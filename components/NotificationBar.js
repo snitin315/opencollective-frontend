@@ -1,8 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import styled from 'styled-components';
+
+import AppRejectionReasonModal from '../components/host-dashboard/AppRejectionReasonModal';
+import AcceptReject from '../components/host-dashboard/AcceptReject';
 
 const logo = '/static/images/opencollective-icon.svg';
+
+const AcceptReject1 = styled.div`
+  display: flex;
+  font-size: 1em;
+  margin: 1em;
+  padding: 0.25em 1em;
+  width: 200px;
+  background: #009e4a;
+`;
 
 class NotificationBar extends React.Component {
   static propTypes = {
@@ -11,11 +24,30 @@ class NotificationBar extends React.Component {
     description: PropTypes.string,
     error: PropTypes.string,
     actions: PropTypes.arrayOf(PropTypes.node),
+    /** Collective */
+    collective: PropTypes.shape({
+      id: PropTypes.number,
+      slug: PropTypes.string,
+    }),
+    /** Host */
+    host: PropTypes.shape({
+      slug: PropTypes.string,
+    }),
+    LoggedInUser: PropTypes.shape({
+      roles: PropTypes.arrayOf(PropTypes.node),
+      hasRole: PropTypes.bool.isRequired,
+    }),
   };
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      showRejectionModal: false,
+      collectiveId: null,
+    };
+  }
   render() {
-    const { status, error, title, description, actions } = this.props;
-
+    const { status, error, title, description, actions, collective, LoggedInUser, host } = this.props;
     return (
       <div className={classNames(status, 'NotificationBar')}>
         <style jsx>
@@ -117,6 +149,20 @@ class NotificationBar extends React.Component {
           <div className={`NotificationLine ${status}`}>
             <h1>{title}</h1>
             <p className="description">{description}</p>
+
+            {LoggedInUser.hasRole('ADMIN', host) && (
+              <AcceptReject1>
+                <AcceptReject collective={collective} host={host} />
+                {this.state.showRejectionModal && (
+                  <AppRejectionReasonModal
+                    show={this.state.showRejectionModal}
+                    onClose={() => this.setState({ showRejectionModal: false })}
+                    collectiveId={this.state.collectiveId}
+                    hostCollectiveSlug={host.slug}
+                  />
+                )}
+              </AcceptReject1>
+            )}
             {actions && (
               <div className="actions">
                 {actions.map(action => (

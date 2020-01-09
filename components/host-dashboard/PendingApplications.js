@@ -21,6 +21,7 @@ import ExternalLink from '../ExternalLink';
 import Avatar from '../Avatar';
 import MessageBox from '../MessageBox';
 import AppRejectionReasonModal from './AppRejectionReasonModal';
+import AcceptReject from './AcceptReject';
 import { getHostPendingApplicationsQuery } from '../../lib/graphql/queries';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 
@@ -149,43 +150,11 @@ class HostPendingApplications extends React.Component {
                   <Check size={39} />
                 </Box>
               ) : (
-                <Fragment>
-                  <Mutation mutation={ApproveCollectiveMutation}>
-                    {(approveCollective, { loading }) => (
-                      <StyledButton
-                        m={1}
-                        loading={loading}
-                        onClick={() => approveCollective({ variables: { id: c.id } })}
-                        data-cy={`${c.slug}-approve`}
-                        buttonStyle="success"
-                        minWidth={125}
-                      >
-                        <FormattedMessage id="actions.approve" defaultMessage="Approve" />
-                      </StyledButton>
-                    )}
-                  </Mutation>
-                  <StyledButton
-                    buttonStyle="danger"
-                    minWidth={125}
-                    m={1}
-                    onClick={() => this.setState({ showRejectionModal: true, collectiveId: c.id })}
-                  >
-                    <FormattedMessage id="actions.reject" defaultMessage="Reject" />
-                  </StyledButton>
-                </Fragment>
+                <AcceptReject collective={c} host={this.props.hostCollectiveSlug} />
               )}
             </Flex>
           </StyledCard>
         ))}
-
-        {this.state.showRejectionModal && (
-          <AppRejectionReasonModal
-            show={this.state.showRejectionModal}
-            onClose={() => this.setState({ showRejectionModal: false })}
-            collectiveId={this.state.collectiveId}
-            hostCollectiveSlug={this.props.hostCollectiveSlug}
-          />
-        )}
       </Container>
     );
   }

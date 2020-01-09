@@ -85,11 +85,21 @@ const getNotification = (intl, status, collective, host) => {
 /**
  * Adds a notification bar for the collective.
  */
-const CollectiveNotificationBar = ({ intl, status, collective, host }) => {
+const CollectiveNotificationBar = ({ intl, status, collective, host, LoggedInUser }) => {
+  // Quickfix for events (as they are not inheriting isApproved status)
+  if (collective.type === CollectiveType.EVENT) return null;
+
   const notification = getNotification(intl, status, collective, host);
 
   return !notification ? null : (
-    <NotificationBar status={status} title={notification.title} description={notification.description} />
+    <NotificationBar
+      status={status}
+      host={host}
+      collective={collective}
+      title={notification.title}
+      description={notification.description}
+      LoggedInUser={LoggedInUser}
+    />
   );
 };
 
@@ -108,6 +118,7 @@ CollectiveNotificationBar.propTypes = {
   status: PropTypes.oneOf(['collectiveCreated', 'collectiveArchived']),
   /** @ignore from injectIntl */
   intl: PropTypes.object,
+  LoggedInUser: PropTypes.object,
 };
 
 export default injectIntl(CollectiveNotificationBar);
