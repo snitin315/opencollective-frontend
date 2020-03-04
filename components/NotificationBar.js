@@ -35,7 +35,7 @@ class NotificationBar extends React.Component {
     }),
     LoggedInUser: PropTypes.shape({
       roles: PropTypes.arrayOf(PropTypes.node),
-      hasRole: PropTypes.bool.isRequired,
+      isHostAdmin: PropTypes.bool.isRequired,
     }),
   };
 
@@ -48,6 +48,7 @@ class NotificationBar extends React.Component {
   }
   render() {
     const { status, error, title, description, actions, collective, LoggedInUser, host } = this.props;
+    const isHostAdmin = LoggedInUser && LoggedInUser.isHostAdmin(collective);
     return (
       <div className={classNames(status, 'NotificationBar')}>
         <style jsx>
@@ -150,7 +151,7 @@ class NotificationBar extends React.Component {
             <h1>{title}</h1>
             <p className="description">{description}</p>
 
-            {LoggedInUser.hasRole('ADMIN', host) && (
+            {isHostAdmin && (
               <AcceptReject1>
                 <AcceptReject collective={collective} host={host} />
                 {this.state.showRejectionModal && (
