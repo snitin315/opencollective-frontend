@@ -1,7 +1,6 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation, graphql } from 'react-apollo';
-import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 import { Flex, Box } from '@rebass/grid';
 import { FormattedMessage } from 'react-intl';
 import { get } from 'lodash';
@@ -15,24 +14,13 @@ import StyledCard from '../StyledCard';
 import { Span } from '../Text';
 import Container from '../Container';
 import LinkCollective from '../LinkCollective';
-import StyledButton from '../StyledButton';
 import StyledHr from '../StyledHr';
 import ExternalLink from '../ExternalLink';
 import Avatar from '../Avatar';
 import MessageBox from '../MessageBox';
-import AppRejectionReasonModal from './AppRejectionReasonModal';
 import AcceptReject from './AcceptReject';
 import { getHostPendingApplicationsQuery } from '../../lib/graphql/queries';
 import { getErrorFromGraphqlException } from '../../lib/utils';
-
-const ApproveCollectiveMutation = gql`
-  mutation approveCollective($id: Int!) {
-    approveCollective(id: $id) {
-      id
-      isActive
-    }
-  }
-`;
 
 class HostPendingApplications extends React.Component {
   static propTypes = {
