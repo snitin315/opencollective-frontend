@@ -126,7 +126,7 @@ const StyledModal = ({ children, show, onClose, ...props }) => {
     return createPortal(
       <React.Fragment>
         <GlobalModalStyle />
-        <ModalWrapper {...props}>
+        <ModalWrapper className="modalWrapper" {...props}>
           {React.Children.map(children, child => {
             if (child.type.displayName === 'Header') {
               return React.cloneElement(child, { onClose });

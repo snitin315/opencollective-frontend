@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Flex } from '@rebass/grid';
@@ -14,6 +14,7 @@ import MessageBox from '../../components/MessageBox';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 import { getLoggedInUserQuery } from '../../lib/graphql/queries';
 import { Router } from '../../server/pages';
+import withViewport, { VIEWPORTS } from '../../lib/withViewport';
 
 const StepsProgressBox = styled(Box)`
   min-height: 95px;
@@ -129,8 +130,12 @@ class OnboardingModal extends React.Component {
   };
 
   submitCollectiveInfo = async () => {
-    await this.submitContact();
-    await this.submitAdmins();
+    try {
+      await this.submitContact();
+      await this.submitAdmins();
+    } catch (e) {
+      this.setState({ isSubmitting: false, error: e });
+    }
     this.props.setShow(false);
     Router.pushRoute('editCollective', { slug: this.props.collective.slug, section: 'info' });
   };
@@ -140,50 +145,91 @@ class OnboardingModal extends React.Component {
   };
 
   render() {
-    const { collective, LoggedInUser, show, setShow } = this.props;
+    const { collective, LoggedInUser, show, setShow, viewport } = this.props;
     const { step, isSubmitting, error } = this.state;
 
     return (
-      <Modal width="576px" minHeight="456px" show={show} onClose={() => setShow(false)}>
-        <ModalHeader onClose={() => setShow(false)}>
-          <Flex flexDirection="column" alignItems="center" width="100%">
-            <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
-              <OnboardingStepsProgress
+      <Fragment>
+        {viewport === VIEWPORTS.MOBILE ? (
+          <Fragment>
+            <Flex flexDirection="column" alignItems="center" width="100%">
+              <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
+                <OnboardingStepsProgress
+                  step={step}
+                  handleStep={step => this.setState({ step })}
+                  slug={collective.slug}
+                />
+              </StepsProgressBox>
+            </Flex>
+            <Flex flexDirection="column" alignItems="center">
+              <img width={'160px'} height={this.setParams(step, 'height')} src={this.setParams(step, 'src')} />
+              <OnboardingContentBox
                 step={step}
-                handleStep={step => this.setState({ step })}
-                slug={collective.slug}
+                collective={collective}
+                LoggedInUser={LoggedInUser}
+                addAdmins={this.addAdmins}
+                addContact={this.addContact}
               />
-            </StepsProgressBox>
-          </Flex>
-        </ModalHeader>
-        <ModalBody>
-          <Flex flexDirection="column" alignItems="center">
-            <img width={'160px'} height={this.setParams(step, 'height')} src={this.setParams(step, 'src')} />
-            <OnboardingContentBox
-              step={step}
-              collective={collective}
-              LoggedInUser={LoggedInUser}
-              addAdmins={this.addAdmins}
-              addContact={this.addContact}
-            />
-            {error && (
-              <MessageBox type="error" withIcon mt={2}>
-                {error.replace('GraphQL error: ', 'Error: ')}
-              </MessageBox>
-            )}
-          </Flex>
-        </ModalBody>
-        <ModalFooter>
-          <Flex flexDirection="column" alignItems="center">
-            <OnboardingNavButtons
-              step={step}
-              slug={collective.slug}
-              submitCollectiveInfo={this.submitCollectiveInfo}
-              loading={isSubmitting}
-            />
-          </Flex>
-        </ModalFooter>
-      </Modal>
+              {error && (
+                <MessageBox type="error" withIcon mt={2}>
+                  {error.replace('GraphQL error: ', 'Error: ')}
+                </MessageBox>
+              )}
+            </Flex>
+            <Flex flexDirection="column" alignItems="center">
+              <OnboardingNavButtons
+                step={step}
+                slug={collective.slug}
+                submitCollectiveInfo={this.submitCollectiveInfo}
+                loading={isSubmitting}
+              />
+            </Flex>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Modal width="576px" minHeight="456px" show={show} onClose={() => setShow(false)}>
+              <ModalHeader onClose={() => setShow(false)}>
+                <Flex flexDirection="column" alignItems="center" width="100%">
+                  <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
+                    <OnboardingStepsProgress
+                      step={step}
+                      handleStep={step => this.setState({ step })}
+                      slug={collective.slug}
+                    />
+                  </StepsProgressBox>
+                </Flex>
+              </ModalHeader>
+              <ModalBody>
+                <Flex flexDirection="column" alignItems="center">
+                  <img width={'160px'} height={this.setParams(step, 'height')} src={this.setParams(step, 'src')} />
+                  <OnboardingContentBox
+                    step={step}
+                    collective={collective}
+                    LoggedInUser={LoggedInUser}
+                    addAdmins={this.addAdmins}
+                    addContact={this.addContact}
+                  />
+                  {error && (
+                    <MessageBox type="error" withIcon mt={2}>
+                      {error.replace('GraphQL error: ', 'Error: ')}
+                    </MessageBox>
+                  )}
+                </Flex>
+              </ModalBody>
+              <ModalFooter>
+                <Flex flexDirection="column" alignItems="center">
+                  <OnboardingNavButtons
+                    step={step}
+                    slug={collective.slug}
+                    submitCollectiveInfo={this.submitCollectiveInfo}
+                    loading={isSubmitting}
+                  />
+                </Flex>
+              </ModalFooter>
+            </Modal>
+          </Fragment>
+        )}
+      </Fragment>
     );
   }
 }
@@ -241,4 +287,4 @@ const addEditCollectiveContactMutation = graphql(editCollectiveContactMutation, 
   }),
 });
 
-export default addEditCollectiveContactMutation(addEditCoreContributorsMutation(OnboardingModal));
+export default withViewport(addEditCollectiveContactMutation(addEditCoreContributorsMutation(OnboardingModal)));
