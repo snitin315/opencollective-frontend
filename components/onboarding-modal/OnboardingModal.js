@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Box, Flex } from '@rebass/grid';
@@ -14,7 +14,6 @@ import MessageBox from '../../components/MessageBox';
 import { getErrorFromGraphqlException } from '../../lib/utils';
 import { getLoggedInUserQuery } from '../../lib/graphql/queries';
 import { Router } from '../../server/pages';
-import withViewport, { VIEWPORTS } from '../../lib/withViewport';
 
 const StepsProgressBox = styled(Box)`
   min-height: 95px;
@@ -23,6 +22,39 @@ const StepsProgressBox = styled(Box)`
   @media screen and (max-width: 640px) {
     width: 100%;
     max-width: 100%;
+  }
+`;
+
+const ResponsiveModal = styled(Modal)`
+  @media screen and (max-width: 40em) {
+    transform: translate(0%, 0%);
+    position: fixed;
+    top: 70px;
+    left: 0px;
+    height: calc(100vh - 70px);
+    background: white;
+    max-width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+`;
+
+const ResponsiveModalHeader = styled(ModalHeader)`
+  @media screen and (max-width: 40em) {
+  }
+`;
+
+const ResponsiveModalBody = styled(ModalBody)`
+  @media screen and (max-width: 40em) {
+  }
+`;
+
+const ResponsiveModalFooter = styled(ModalFooter)`
+  @media screen and (max-width: 40em) {
   }
 `;
 
@@ -145,91 +177,50 @@ class OnboardingModal extends React.Component {
   };
 
   render() {
-    const { collective, LoggedInUser, show, setShow, viewport } = this.props;
+    const { collective, LoggedInUser, show, setShow } = this.props;
     const { step, isSubmitting, error } = this.state;
 
     return (
-      <Fragment>
-        {viewport === VIEWPORTS.MOBILE ? (
-          <Fragment>
-            <Flex flexDirection="column" alignItems="center" width="100%">
-              <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
-                <OnboardingStepsProgress
-                  step={step}
-                  handleStep={step => this.setState({ step })}
-                  slug={collective.slug}
-                />
-              </StepsProgressBox>
-            </Flex>
-            <Flex flexDirection="column" alignItems="center">
-              <img width={'160px'} height={this.setParams(step, 'height')} src={this.setParams(step, 'src')} />
-              <OnboardingContentBox
+      <ResponsiveModal usePortal={false} width="576px" minHeight="456px" show={show} onClose={() => setShow(false)}>
+        <ResponsiveModalHeader onClose={() => setShow(false)} iconDisplay={'none'}>
+          <Flex flexDirection="column" alignItems="center" width="100%">
+            <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
+              <OnboardingStepsProgress
                 step={step}
-                collective={collective}
-                LoggedInUser={LoggedInUser}
-                addAdmins={this.addAdmins}
-                addContact={this.addContact}
-              />
-              {error && (
-                <MessageBox type="error" withIcon mt={2}>
-                  {error.replace('GraphQL error: ', 'Error: ')}
-                </MessageBox>
-              )}
-            </Flex>
-            <Flex flexDirection="column" alignItems="center">
-              <OnboardingNavButtons
-                step={step}
+                handleStep={step => this.setState({ step })}
                 slug={collective.slug}
-                submitCollectiveInfo={this.submitCollectiveInfo}
-                loading={isSubmitting}
               />
-            </Flex>
-          </Fragment>
-        ) : (
-          <Fragment>
-            <Modal width="576px" minHeight="456px" show={show} onClose={() => setShow(false)}>
-              <ModalHeader onClose={() => setShow(false)}>
-                <Flex flexDirection="column" alignItems="center" width="100%">
-                  <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
-                    <OnboardingStepsProgress
-                      step={step}
-                      handleStep={step => this.setState({ step })}
-                      slug={collective.slug}
-                    />
-                  </StepsProgressBox>
-                </Flex>
-              </ModalHeader>
-              <ModalBody>
-                <Flex flexDirection="column" alignItems="center">
-                  <img width={'160px'} height={this.setParams(step, 'height')} src={this.setParams(step, 'src')} />
-                  <OnboardingContentBox
-                    step={step}
-                    collective={collective}
-                    LoggedInUser={LoggedInUser}
-                    addAdmins={this.addAdmins}
-                    addContact={this.addContact}
-                  />
-                  {error && (
-                    <MessageBox type="error" withIcon mt={2}>
-                      {error.replace('GraphQL error: ', 'Error: ')}
-                    </MessageBox>
-                  )}
-                </Flex>
-              </ModalBody>
-              <ModalFooter>
-                <Flex flexDirection="column" alignItems="center">
-                  <OnboardingNavButtons
-                    step={step}
-                    slug={collective.slug}
-                    submitCollectiveInfo={this.submitCollectiveInfo}
-                    loading={isSubmitting}
-                  />
-                </Flex>
-              </ModalFooter>
-            </Modal>
-          </Fragment>
-        )}
-      </Fragment>
+            </StepsProgressBox>
+          </Flex>
+        </ResponsiveModalHeader>
+        <ResponsiveModalBody>
+          <Flex flexDirection="column" alignItems="center">
+            <img width={'160px'} height={this.setParams(step, 'height')} src={this.setParams(step, 'src')} />
+            <OnboardingContentBox
+              step={step}
+              collective={collective}
+              LoggedInUser={LoggedInUser}
+              addAdmins={this.addAdmins}
+              addContact={this.addContact}
+            />
+            {error && (
+              <MessageBox type="error" withIcon mt={2}>
+                {error.replace('GraphQL error: ', 'Error: ')}
+              </MessageBox>
+            )}
+          </Flex>
+        </ResponsiveModalBody>
+        <ResponsiveModalFooter>
+          <Flex flexDirection="column" alignItems="center">
+            <OnboardingNavButtons
+              step={step}
+              slug={collective.slug}
+              submitCollectiveInfo={this.submitCollectiveInfo}
+              loading={isSubmitting}
+            />
+          </Flex>
+        </ResponsiveModalFooter>
+      </ResponsiveModal>
     );
   }
 }
@@ -287,4 +278,4 @@ const addEditCollectiveContactMutation = graphql(editCollectiveContactMutation, 
   }),
 });
 
-export default withViewport(addEditCollectiveContactMutation(addEditCoreContributorsMutation(OnboardingModal)));
+export default addEditCollectiveContactMutation(addEditCoreContributorsMutation(OnboardingModal));
