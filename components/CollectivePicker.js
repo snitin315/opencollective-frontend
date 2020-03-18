@@ -193,6 +193,7 @@ class CollectivePicker extends React.PureComponent {
   render() {
     const {
       intl,
+      clearValues,
       collectives,
       creatable,
       customOptions,
@@ -213,9 +214,7 @@ class CollectivePicker extends React.PureComponent {
     const { createFormCollectiveType, createdCollectives, showCreatedCollective } = this.state;
     const collectiveOptions = this.getOptionsFromCollectives(collectives, groupByType, sortFunc, intl);
     const allOptions = this.getAllOptions(collectiveOptions, customOptions, createdCollectives, creatable, intl);
-    const value = showCreatedCollective
-      ? this.buildCollectiveOption(last(createdCollectives))
-      : getOptions(this.buildCollectiveOption);
+    const value = isDisabled ? getOptions(this.buildCollectiveOption) : null;
 
     return (
       <Container position="relative" minWidth={minWidth} maxWidth={maxWidth} width={width}>
@@ -305,6 +304,12 @@ CollectivePicker.propTypes = {
   types: PropTypes.arrayOf(PropTypes.oneOf(Object.values(CollectiveType))),
   /** @ignore from injectIntl */
   intl: PropTypes.object,
+  /** Use this to control the value of the component */
+  collective: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    type: PropTypes.string,
+    name: PropTypes.string,
+  }),
 };
 
 CollectivePicker.defaultProps = {
