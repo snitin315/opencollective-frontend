@@ -84,7 +84,7 @@ StyledTag.defaultProps = {
   textTransform: 'uppercase',
   closeButtonHeight: '2.5em',
   closeButtonWidth: '2.5em',
-  closeButtonBackground: '#212121',
+  closeButtonBackground: 'rgba(33, 33, 33, 1)',
   closeButtonColor: 'white',
   display: 'block',
 };

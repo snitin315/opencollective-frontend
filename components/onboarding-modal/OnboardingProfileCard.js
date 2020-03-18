@@ -12,12 +12,6 @@ const Admin = styled(StyledTag)`
   font-size: 14px;
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-
-  ${tag =>
-    tag.noOverlay &&
-    css`
-      display: none;
-    `}
 `;
 
 class OnboardingProfileCard extends React.Component {
@@ -34,19 +28,17 @@ class OnboardingProfileCard extends React.Component {
         {/* for invited users email is null */}
         {email === null ? (
           <StyledTooltip
-            content={<FormattedMessage id="onboarding.admins.pending" defaultMessage="Pending for approval" />}
+            content={() => <FormattedMessage id="onboarding.admins.pending" defaultMessage="Pending for approval" />}
           >
             <Admin
               textTransform="none"
               display="flex"
               alignItems="center"
               closeButtonProps={{
-                onClick: () => console.log('yooooooo'),
-                onMouseEnter: () => console.log('heeeeey'),
-                closeButtonWidth: '20px',
-                closeButtonHeight: '20px',
+                closeButtonWidth: '1.5em',
+                closeButtonHeight: '1.5em',
                 closeButtonColor: 'black',
-                closeButtonBackground: 'rgba(0, 0, 155, 1.0)',
+                closeButtonBackground: 'rgba(0, 0, 0, 0)',
                 closeButtonDisplay: 'flex',
                 closeButtonAlign: 'center',
               }}
@@ -65,12 +57,10 @@ class OnboardingProfileCard extends React.Component {
             display="flex"
             alignItems="center"
             closeButtonProps={{
-              onClick: () => console.log('yooooooo'),
-              onMouseEnter: () => console.log('heeeeey'),
-              closeButtonWidth: '20px',
-              closeButtonHeight: '20px',
+              closeButtonWidth: '1.5em',
+              closeButtonHeight: '1.5em',
               closeButtonColor: 'black',
-              closeButtonBackground: 'rgba(0, 0, 155, 1.0)',
+              closeButtonBackground: 'rgba(0, 0, 0, 0)',
               closeButtonDisplay: 'flex',
               closeButtonAlign: 'center',
             }}
