@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Flex, Box } from '@rebass/grid';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { FormattedMessage } from 'react-intl';
 
 import Avatar from '../../components/Avatar';
