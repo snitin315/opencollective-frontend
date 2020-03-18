@@ -35,7 +35,7 @@ const GlobalModalStyle = createGlobalStyle`
   }
 `;
 
-const ModalOverlay = styled.div`
+export const ModalOverlay = styled.div`
   position: fixed;
   top: 0;
   left: 0;
