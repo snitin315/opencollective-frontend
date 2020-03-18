@@ -49,6 +49,8 @@ class OnboardingContentBox extends React.Component {
     const { step, collective, addAdmins, addContact, intl } = this.props;
     const { admins } = this.state;
 
+    console.log(admins);
+
     return (
       <Container display="flex" flexDirection="column" width="80%" alignItems="center">
         {step === 0 && (

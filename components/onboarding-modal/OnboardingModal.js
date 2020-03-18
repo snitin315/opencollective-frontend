@@ -59,8 +59,8 @@ const ResponsiveModalFooter = styled(ModalFooter)`
 `;
 
 const ResponsiveModalOverlay = styled(ModalOverlay)`
-  ${p =>
-    p.noOverlay &&
+  ${overlay =>
+    overlay.noOverlay &&
     css`
       display: none;
     `}

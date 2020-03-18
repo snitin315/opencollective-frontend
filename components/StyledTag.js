@@ -22,6 +22,9 @@ const StyledTagBase = styled.div`
     vertical-align: middle;
   }
 
+  display: ${props => props.display};
+  align-items: ${props => props.alignItems};
+
   ${background}
   ${border}
   ${color}
@@ -37,16 +40,18 @@ const StyledTagBase = styled.div`
 
 const CloseButton = styled.button`
   border-radius: 50%;
-  background: #212121;
-  color: white;
+  background: ${closeButtonProps => closeButtonProps.closeButtonBackground};
+  color: ${closeButtonProps => closeButtonProps.closeButtonColor};
   mix-blend-mode: color-burn;
   cursor: pointer;
   margin: 0px;
   text-align: center;
   line-height: 1;
   padding: 4px;
-  width: 2.5em;
-  height: 2.5em;
+  width: ${closeButtonProps => closeButtonProps.closeButtonWidth};
+  height: ${closeButtonProps => closeButtonProps.closeButtonHeight};
+  display: ${closeButtonProps => closeButtonProps.closeButtonDisplay};
+  align-items: ${closeButtonProps => closeButtonProps.closeButtonAlign};
   &:hover {
     opacity: 0.8;
     transform: scale(1.05);
@@ -77,6 +82,11 @@ StyledTag.propTypes = {
 
 StyledTag.defaultProps = {
   textTransform: 'uppercase',
+  closeButtonHeight: '2.5em',
+  closeButtonWidth: '2.5em',
+  closeButtonBackground: '#212121',
+  closeButtonColor: 'white',
+  display: 'block',
 };
 
 export default StyledTag;
