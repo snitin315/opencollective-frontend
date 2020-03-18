@@ -200,7 +200,7 @@ class OnboardingModal extends React.Component {
     return (
       <React.Fragment>
         <ResponsiveModal usePortal={false} width="576px" minHeight="456px" onClose={this.onClose} show={show}>
-          <ResponsiveModalHeader onClose={this.onClose} iconDisplay={'none'}>
+          <ResponsiveModalHeader onClose={this.onClose}>
             <Flex flexDirection="column" alignItems="center" width="100%">
               <StepsProgressBox ml={'15px'} mb={[3, null, 4]} width={0.8}>
                 <OnboardingStepsProgress
