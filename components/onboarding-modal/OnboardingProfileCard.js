@@ -27,13 +27,39 @@ class OnboardingProfileCard extends React.Component {
 
   render() {
     const { collective } = this.props;
-    const { name } = collective;
+    const { name, email } = collective;
 
     return (
       <Flex my={1} ml={2}>
-        <StyledTooltip
-          content={<FormattedMessage id="onboarding.admins.pending" defaultMessage="Pending for approval" />}
-        >
+        {/* for invited users email is null */}
+        {email === null ? (
+          <StyledTooltip
+            content={<FormattedMessage id="onboarding.admins.pending" defaultMessage="Pending for approval" />}
+          >
+            <Admin
+              textTransform="none"
+              display="flex"
+              alignItems="center"
+              closeButtonProps={{
+                onClick: () => console.log('yooooooo'),
+                onMouseEnter: () => console.log('heeeeey'),
+                closeButtonWidth: '20px',
+                closeButtonHeight: '20px',
+                closeButtonColor: 'black',
+                closeButtonBackground: 'rgba(0, 0, 155, 1.0)',
+                closeButtonDisplay: 'flex',
+                closeButtonAlign: 'center',
+              }}
+            >
+              <Flex alignItems="center">
+                <Avatar radius={15} collective={collective} />
+                <Box fontSize="Caption" ml={2}>
+                  {name} {email === null}
+                </Box>
+              </Flex>
+            </Admin>
+          </StyledTooltip>
+        ) : (
           <Admin
             textTransform="none"
             display="flex"
@@ -52,11 +78,11 @@ class OnboardingProfileCard extends React.Component {
             <Flex alignItems="center">
               <Avatar radius={15} collective={collective} />
               <Box fontSize="Caption" ml={2}>
-                {name}
+                {name} {email === null}
               </Box>
             </Flex>
           </Admin>
-        </StyledTooltip>
+        )}
       </Flex>
     );
   }
