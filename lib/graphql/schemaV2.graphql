@@ -1,5 +1,5 @@
 # source: http://localhost:3060/graphql/v2
-# timestamp: Tue Mar 17 2020 09:01:03 GMT+0100 (Central European Standard Time)
+# timestamp: Wed Mar 18 2020 17:51:44 GMT+0100 (GMT+01:00)
 
 """
 Account interface shared by all kind of accounts (Bot, Collective, Event, User, Organization)
@@ -371,7 +371,7 @@ type Comment {
   fromAccount: Account
   account: Account
   fromCollective: Account @deprecated(reason: "2020-02-25: Please use fromAccount")
-  collective: Account @deprecated(reason: "2020-02-25: Please use fromAccount")
+  collective: Account @deprecated(reason: "2020-02-25: Please use account")
 }
 
 """
@@ -385,14 +385,15 @@ type CommentCollection implements Collection {
 }
 
 input CommentCreateInput {
-  markdown: String
+  """
+  Thr HTML content of your comment
+  """
   html: String
 
   """
   If your comment is linked to an expense, set it here
   """
   expense: ExpenseReferenceInput
-  ExpenseId: Int
   ConversationId: String
 }
 
