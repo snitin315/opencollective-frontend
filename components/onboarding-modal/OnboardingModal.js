@@ -154,7 +154,8 @@ class OnboardingModal extends React.Component {
         })),
       });
     } catch (e) {
-      this.setState({ isSubmitting: false, error: getErrorFromGraphqlException(e) });
+      const errorMsg = getErrorFromGraphqlException(e).message;
+      throw new Error(errorMsg);
     }
   };
 
@@ -169,7 +170,8 @@ class OnboardingModal extends React.Component {
         collective,
       });
     } catch (e) {
-      this.setState({ isSubmitting: false, error: getErrorFromGraphqlException(e) });
+      const errorMsg = getErrorFromGraphqlException(e).message;
+      throw new Error(errorMsg);
     }
   };
 
@@ -177,11 +179,10 @@ class OnboardingModal extends React.Component {
     try {
       await this.submitContact();
       await this.submitAdmins();
+      Router.pushRoute('editCollective', { slug: this.props.collective.slug, section: 'info' });
     } catch (e) {
       this.setState({ isSubmitting: false, error: e });
     }
-    this.props.setShow(false);
-    Router.pushRoute('editCollective', { slug: this.props.collective.slug, section: 'info' });
   };
 
   setParams = (step, param) => {
@@ -223,7 +224,7 @@ class OnboardingModal extends React.Component {
               />
               {error && (
                 <MessageBox type="error" withIcon mt={2}>
-                  {error.replace('GraphQL error: ', 'Error: ')}
+                  {error.message}
                 </MessageBox>
               )}
             </Flex>
