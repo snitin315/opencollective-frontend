@@ -17,10 +17,12 @@ const Admin = styled(StyledTag)`
 class OnboardingProfileCard extends React.Component {
   static propTypes = {
     collective: PropTypes.object,
+    adminCollective: PropTypes.object,
+    removeAdmin: PropTypes.func,
   };
 
   render() {
-    const { collective } = this.props;
+    const { collective, removeAdmin, adminCollective } = this.props;
     const { name, email } = collective;
 
     return (
@@ -41,6 +43,7 @@ class OnboardingProfileCard extends React.Component {
                 closeButtonBackground: 'rgba(0, 0, 0, 0)',
                 closeButtonDisplay: 'flex',
                 closeButtonAlign: 'center',
+                onClick: () => removeAdmin(collective),
               }}
             >
               <Flex alignItems="center">
@@ -56,14 +59,17 @@ class OnboardingProfileCard extends React.Component {
             textTransform="none"
             display="flex"
             alignItems="center"
-            closeButtonProps={{
-              closeButtonWidth: '1.5em',
-              closeButtonHeight: '1.5em',
-              closeButtonColor: 'black',
-              closeButtonBackground: 'rgba(0, 0, 0, 0)',
-              closeButtonDisplay: 'flex',
-              closeButtonAlign: 'center',
-            }}
+            closeButtonProps={
+              collective.id !== adminCollective.id && {
+                closeButtonWidth: '1.5em',
+                closeButtonHeight: '1.5em',
+                closeButtonColor: 'black',
+                closeButtonBackground: 'rgba(0, 0, 0, 0)',
+                closeButtonDisplay: 'flex',
+                closeButtonAlign: 'center',
+                onClick: () => removeAdmin(collective),
+              }
+            }
           >
             <Flex alignItems="center">
               <Avatar radius={15} collective={collective} />

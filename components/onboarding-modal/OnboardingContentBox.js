@@ -45,11 +45,16 @@ class OnboardingContentBox extends React.Component {
     });
   }
 
-  render() {
-    const { step, collective, addAdmins, addContact, intl } = this.props;
-    const { admins } = this.state;
+  removeAdmin = collective => {
+    const filteredAdmins = this.state.admins.filter(admin => admin.member.id !== collective.id);
+    this.setState({
+      admins: filteredAdmins,
+    });
+  };
 
-    console.log(admins);
+  render() {
+    const { step, collective, addAdmins, addContact, intl, LoggedInUser } = this.props;
+    const { admins } = this.state;
 
     return (
       <Container display="flex" flexDirection="column" width="80%" alignItems="center">
@@ -91,7 +96,12 @@ class OnboardingContentBox extends React.Component {
             {admins.length > 0 && (
               <Flex px={3} width="100%" flexWrap="wrap">
                 {admins.map(admin => (
-                  <OnboardingProfileCard key={admin.member.id} collective={admin.member} />
+                  <OnboardingProfileCard
+                    key={admin.member.id}
+                    collective={admin.member}
+                    adminCollective={LoggedInUser.collective}
+                    removeAdmin={this.removeAdmin}
+                  />
                 ))}
               </Flex>
             )}
