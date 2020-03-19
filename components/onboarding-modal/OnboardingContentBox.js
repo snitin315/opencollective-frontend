@@ -20,7 +20,7 @@ class OnboardingContentBox extends React.Component {
     LoggedInUser: PropTypes.object,
     addAdmins: PropTypes.func,
     addContact: PropTypes.func,
-    intl: PropTypes.object,
+    intl: PropTypes.object.isRequired,
   };
 
   constructor(props) {
