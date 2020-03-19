@@ -992,6 +992,7 @@
   "onboarding.admins.caption": "Admins can modify the Collective page and approve expenses.",
   "onboarding.admins.header": "Add administrators",
   "onboarding.admins.invite": "Invite administrators",
+  "onboarding.admins.pending": "Pending for approval",
   "onboarding.collective.created": "The {collective} Collective has been created!",
   "onboarding.contact.connect": "Connect your social platforms",
   "onboarding.contact.header": "Links and contact info",

@@ -1,18 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
-import { Box, Flex } from '@rebass/grid';
-import { FormattedMessage } from 'react-intl';
 
 import OnboardingModal from '../components/onboarding-modal/OnboardingModal';
 import ErrorPage from '../components/ErrorPage';
-import SignInOrJoinFree from '../components/SignInOrJoinFree';
-import Page from '../components/Page';
-import { H1, P } from '../components/Text';
 import { withUser } from '../components/UserProvider';
 import AuthenticatedPage from '../components/AuthenticatedPage';
-import Loading from '../components/Loading';
-import Container from '../components/Container';
 import { getCollectivePageQuery } from '../components/collective-page/graphql/queries';
 
 class NewCollectiveOnboardingPage extends React.Component {
