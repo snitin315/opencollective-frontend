@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { get } from 'lodash';
 import memoizeOne from 'memoize-one';
 import { defineMessages, FormattedDate, FormattedMessage, injectIntl } from 'react-intl';
+import styled from 'styled-components';
 
 import { getPrecisionFromAmount } from '../../lib/currency-utils';
 import { getNextChargeDate } from '../../lib/date-utils';
 import { Router } from '../../server/pages';
+import FormattedMoneyAmount from '../FormattedMoneyAmount';
 
 import Container from '../Container';
 import Currency from '../Currency';
@@ -34,6 +36,13 @@ const FrequenciesI18n = defineMessages({
     defaultMessage: 'Yearly',
   },
 });
+
+const MinAmount = styled(Span)`
+  &:before {
+    content: 'Minimum Amount: ';
+    margin-left: -100px;
+  }
+`;
 
 const getOption = (intl, interval) => {
   return {
@@ -179,6 +188,9 @@ const StepDetails = ({
               />
             )}
           </StyledInputField>
+          <MinAmount fontSize="Caption" fontWeight="bold" color="black.600">
+            <FormattedMoneyAmount amount={minAmount} currency={currency} interval={interval} />
+          </MinAmount>
         </Container>
         {showQuantity && (
           <StyledInputField
