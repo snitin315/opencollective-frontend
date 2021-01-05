@@ -196,7 +196,7 @@ class SearchPage extends React.Component {
                   <em>
                     <FormattedMessage
                       id="search.noResult"
-                      defaultMessage='No collectives found matching your query: "{query}"'
+                      defaultMessage="Your search did not match any result"
                       values={{ query: term }}
                     />
                   </em>
